@@ -57,4 +57,9 @@ function game() {
     console.log('Match tied');
 }
 
-game();
+const playButton = document.querySelector('.play');
+const instruction = document.querySelector('.instruction');
+playButton.addEventListener('click', () => {
+    instruction.textContent = 'You clicked';
+    setTimeout(() => instruction.textContent = 'Click on icon below to start a new game',3000);
+});
