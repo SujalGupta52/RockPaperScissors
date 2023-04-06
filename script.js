@@ -11,7 +11,7 @@ function getComputerChoice() {
 }
 
 function playRound(playerSelection,computerSelection) {
-    playerSelection= playerSelection.toLowerCase();
+    playerSelection = playerSelection.toLowerCase();
     let winner='';
     if(computerSelection === 'rock' && playerSelection === 'paper')
     winner='player';
@@ -35,31 +35,161 @@ function game() {
     let computerSelection='';
     let playerScore=0;
     let computerScore=0;
-    for(i=1;i<=5;i++) {
-        playerSelection=prompt("Enter rock, paper or scissor");
+    const button = document.querySelector('.buttons');
+    button.removeChild(playButton);
+    button.appendChild(rockButton);
+    button.appendChild(paperButton);
+    button.appendChild(scissorButton);
+    
+    for(i=1;i<5;i++) {
+        playerSelection = getComputerChoice();
         computerSelection=getComputerChoice();
-        if(playRound(playerSelection, computerSelection)==='player'){
-        console.log(`You Won Round ${i}! ${playerSelection} beats ${computerSelection}`);
+        if(playRound(playerSelection, computerSelection) === 'player'){
+        instruction.textContent=`You Won Round ${i}! ${playerSelection} beats ${computerSelection}`;
         playerScore++;
         }
-        else if(playRound(playerSelection, computerSelection)==='computer'){
-        console.log(`You Lost Round ${i}! ${computerSelection} beats ${playerSelection}`);
+        else if(playRound(playerSelection, computerSelection) === 'computer'){
+        instruction.textContent=`You Lost Round ${i}! ${computerSelection} beats ${playerSelection}`;
         computerScore++;
         }
         else
-        console.log(`Round ${i} tied`);
+        instruction.textContent=`Round ${i} tied`;
+        if(playerScore === 5 || computerScore === 5)
+        break;
     }
     if(playerScore > computerScore)
-    console.log('You Won');
+    setTimeout(() => instruction.textContent=('You Won'),3000);
     else if(computerScore > playerScore)
-    console.log('You Lost');
+    setTimeout(() => instruction.textContent=('You Lost'),3000);
     else if(computerScore==playerScore)
-    console.log('Match tied');
+    setTimeout(() => instruction.textContent=('Match tied'));
+}
+
+function changeButtons() { /* remove play button and add rock paper scissor button */
+    const rockButton = document.createElement('button');
+    const paperButton = document.createElement('button');
+    const scissorButton = document.createElement('button');
+    
+    const img = document.createElement('img');
+    const img2 = document.createElement('img');
+    const img3 = document.createElement('img');
+    
+    const button = document.querySelector('.buttons');
+    button.removeChild(playButton);  
+
+    rockButton.classList.add('rock');
+    img.src = "images/rock.svg";
+    img.height = "100px";
+    img.width = 'auto';  
+    rockButton.appendChild(img);
+    button.appendChild(rockButton); /*  create buttons and add img to it */
+    
+    paperButton.classList.add('paper');
+    img2.height = "90px";
+    img2.width = 'auto';
+    img2.src = 'images/paper.svg';
+    paperButton.appendChild(img2);
+    button.appendChild(paperButton);
+
+    scissorButton.classList.add('scissor');
+    img3.height = "100px";
+    img3.width = 'auto';
+    img3.src = 'images/scissor.svg';
+    scissorButton.appendChild(img3);
+    button.appendChild(scissorButton); 
+    
+}
+
+function addScoreToPage() { /* Add player and computer score in ui */
+    const body = document.querySelector('body');
+
+    const div = document.createElement('div');
+
+    const player = document.createElement('div');
+    const computer = document.createElement('div');
+
+    const playerScoreText = document.createElement('div');
+    const playerScoreValue = document.createElement('div');
+    const computerScoreText = document.createElement('div');
+    const computerScoreValue = document.createElement('div');
+
+    div.classList.add('score');
+    player.classList.add('player');
+    computer.classList.add('computer');
+    playerScoreText.classList.add('text');
+    playerScoreValue.classList.add('score-player');
+    computerScoreText.classList.add('text');
+    playerScoreValue.classList.add('score-computer');
+
+    playerScoreText.textContent = 'Player';
+    computerScoreText.textContent = 'Computer';
+    playerScoreValue.textContent = '0';
+    computerScoreValue.textContent = '0';
+
+    player.appendChild(playerScoreText);
+    player.appendChild(playerScoreValue);
+    computer.appendChild(computerScoreText);
+    computer.appendChild(computerScoreValue);
+    div.append(player);
+    div.append(computer);
+    body.appendChild(div);
+}
+
+function updateScoreUI() {
+    document.querySelector('.score-player').textContent = `${playerScore}`;
+    document.querySelector('.score-player').textContent = `${computerScore}`;
+}
+
+function playGame() { 
+    document.querySelectorAll('button').forEach(item => {
+        item.addEventListener('click', event => {
+            let playerSelection = item.classList.value;
+            let computerSelection = getComputerChoice();
+            if(playRound(playerSelection,computerSelection) === 'player'){
+                instruction.textContent=`You Won This Round! ${playerSelection} beats ${computerSelection}`;
+                playerScore++;
+                }
+            else if(playRound(playerSelection, computerSelection) === 'computer'){
+                instruction.textContent=`You Lost This Round! ${computerSelection} beats ${playerSelection}`;
+                computerScore++;
+                }
+            else
+                instruction.textContent=`Round tied`;
+            updateScoreUI();
+            if(playerScore > computerScore)
+                instruction.textContent=('You Won');
+            else if(computerScore > playerScore)
+                instruction.textContent=('You Lost');
+            else if(computerScore==playerScore)
+                instruction.textContent=('Match tied'); 
+        })
+      })
+}
+
+function changeUI() {
+    changeButtons();
+    addScoreToPage();
+    instruction.textContent = 'Select Rock, Paper or Scissor';
 }
 
 const playButton = document.querySelector('.play');
 const instruction = document.querySelector('.instruction');
-playButton.addEventListener('click', () => {
-    instruction.textContent = 'You clicked';
-    setTimeout(() => instruction.textContent = 'Click on icon below to start a new game',3000);
-});
+
+playButton.addEventListener('click', changeUI);
+
+let playerScore= 0;
+let computerScore= 0;
+
+// for(i=1;i<10;i++) {
+//     playerSelection = getComputerChoice();
+//     computerSelection = getComputerChoice();
+//
+//     if(playerScore === 5 || computerScore === 5)
+//     break;
+// }
+if(playerScore > computerScore)
+setTimeout(() => instruction.textContent=('You Won'),3000);
+else if(computerScore > playerScore)
+setTimeout(() => instruction.textContent=('You Lost'),3000);
+else if(computerScore==playerScore)
+setTimeout(() => instruction.textContent=('Match tied'));
