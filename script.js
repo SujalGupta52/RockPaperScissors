@@ -118,7 +118,7 @@ function addScoreToPage() { /* Add player and computer score in ui */
     playerScoreText.classList.add('text');
     playerScoreValue.classList.add('score-player');
     computerScoreText.classList.add('text');
-    playerScoreValue.classList.add('score-computer');
+    computerScoreValue.classList.add('score-computer');
 
     playerScoreText.textContent = 'Player';
     computerScoreText.textContent = 'Computer';
@@ -156,35 +156,34 @@ function end() {
     });
     document.querySelector('.buttons').append(playButton);
 }
+
 function playGame() { 
     document.querySelectorAll('button').forEach(item => {
         item.addEventListener('click', event => {
             let playerSelection = item.classList.value;
             let computerSelection = getComputerChoice();
-            if(playerScore != 5 && computerScore != 5){
                 if(playRound(playerSelection,computerSelection) === 'player'){
                    instruction.textContent=`You Won This Round! ${playerSelection} beats ${computerSelection}`;
                    playerScore++;
+                   updateScoreUI();
+                   if(playerScore === 5) {
+                    instruction.textContent=('You Won');
+                    
+                    setTimeout(end, 3000);
+                    }
                 }
                 else if(playRound(playerSelection, computerSelection) === 'computer'){
                     instruction.textContent=`You Lost This Round! ${computerSelection} beats ${playerSelection}`;
                     computerScore++;
+                    updateScoreUI();
+                    if(computerScore === 5) {
+                        instruction.textContent=('You Lost');
+                        setTimeout(end, 3000);
+                    }
                 }
                 else
                     instruction.textContent=`Round tied`;
-                updateScoreUI();
-            }
-            else {
-                if(playerScore = 5) {
-                    instruction.textContent=('You Won');
-                    end();
-                }
-                else if(computerScore = 5) {
-                    instruction.textContent=('You Lost');
-                    end();
-                }
-            }
-        })
+            })
       })
 }
 
@@ -204,5 +203,5 @@ playButton.addEventListener('click',() => {
     game();
 });
 
-let playerScore= 0;
-let computerScore= 0;
+let playerScore = 0;
+let computerScore = 0;
