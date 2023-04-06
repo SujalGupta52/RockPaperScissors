@@ -137,7 +137,7 @@ function addScoreToPage() { /* Add player and computer score in ui */
 
 function updateScoreUI() {
     document.querySelector('.score-player').textContent = `${playerScore}`;
-    document.querySelector('.score-player').textContent = `${computerScore}`;
+    document.querySelector('.score-computer').textContent = `${computerScore}`;
 }
 
 function playGame() { 
@@ -156,12 +156,18 @@ function playGame() {
             else
                 instruction.textContent=`Round tied`;
             updateScoreUI();
-            if(playerScore > computerScore)
+            if(playerScore > computerScore) {
                 instruction.textContent=('You Won');
-            else if(computerScore > playerScore)
+                end();
+            }
+            else if(computerScore > playerScore) {
                 instruction.textContent=('You Lost');
-            else if(computerScore==playerScore)
-                instruction.textContent=('Match tied'); 
+                end();
+            }
+            else if(computerScore==playerScore) {
+                instruction.textContent=('Match tied');
+                end(); 
+            }
         })
       })
 }
