@@ -75,7 +75,6 @@ function changeButtons() { /* remove play button and add rock paper scissor butt
     const img3 = document.createElement('img');
     
     const button = document.querySelector('.buttons');
-    button.removeChild(playButton);  
 
     rockButton.classList.add('rock');
     img.src = "images/rock.svg";
@@ -140,62 +139,70 @@ function updateScoreUI() {
     document.querySelector('.score-computer').textContent = `${computerScore}`;
 }
 
+function end() {
+    document.querySelectorAll('button').forEach(item => {
+        document.querySelector('.buttons').removeChild(item);
+    });
+    document.querySelector('body').removeChild(document.querySelector('.score'));
+    playerScore = 0;
+    computerScore = 0;
+    instruction.textContent = 'Play another match?';
+    const playButton = document.createElement('button');
+    playButton.classList.add('play');
+    playButton.addEventListener('click', () => {
+        const button = document.querySelector('.buttons');
+        button.removeChild(playButton); 
+        game();
+    });
+    document.querySelector('.buttons').append(playButton);
+}
 function playGame() { 
     document.querySelectorAll('button').forEach(item => {
         item.addEventListener('click', event => {
             let playerSelection = item.classList.value;
             let computerSelection = getComputerChoice();
-            if(playRound(playerSelection,computerSelection) === 'player'){
-                instruction.textContent=`You Won This Round! ${playerSelection} beats ${computerSelection}`;
-                playerScore++;
+            if(playerScore != 5 && computerScore != 5){
+                if(playRound(playerSelection,computerSelection) === 'player'){
+                   instruction.textContent=`You Won This Round! ${playerSelection} beats ${computerSelection}`;
+                   playerScore++;
                 }
-            else if(playRound(playerSelection, computerSelection) === 'computer'){
-                instruction.textContent=`You Lost This Round! ${computerSelection} beats ${playerSelection}`;
-                computerScore++;
+                else if(playRound(playerSelection, computerSelection) === 'computer'){
+                    instruction.textContent=`You Lost This Round! ${computerSelection} beats ${playerSelection}`;
+                    computerScore++;
                 }
-            else
-                instruction.textContent=`Round tied`;
-            updateScoreUI();
-            if(playerScore > computerScore) {
-                instruction.textContent=('You Won');
-                end();
+                else
+                    instruction.textContent=`Round tied`;
+                updateScoreUI();
             }
-            else if(computerScore > playerScore) {
-                instruction.textContent=('You Lost');
-                end();
-            }
-            else if(computerScore==playerScore) {
-                instruction.textContent=('Match tied');
-                end(); 
+            else {
+                if(playerScore = 5) {
+                    instruction.textContent=('You Won');
+                    end();
+                }
+                else if(computerScore = 5) {
+                    instruction.textContent=('You Lost');
+                    end();
+                }
             }
         })
       })
 }
 
-function changeUI() {
+function game() {
     changeButtons();
     addScoreToPage();
     instruction.textContent = 'Select Rock, Paper or Scissor';
+    playGame();
 }
 
 const playButton = document.querySelector('.play');
 const instruction = document.querySelector('.instruction');
 
-playButton.addEventListener('click', changeUI);
+playButton.addEventListener('click',() => {
+    const button = document.querySelector('.buttons');
+    button.removeChild(playButton); 
+    game();
+});
 
 let playerScore= 0;
 let computerScore= 0;
-
-// for(i=1;i<10;i++) {
-//     playerSelection = getComputerChoice();
-//     computerSelection = getComputerChoice();
-//
-//     if(playerScore === 5 || computerScore === 5)
-//     break;
-// }
-if(playerScore > computerScore)
-setTimeout(() => instruction.textContent=('You Won'),3000);
-else if(computerScore > playerScore)
-setTimeout(() => instruction.textContent=('You Lost'),3000);
-else if(computerScore==playerScore)
-setTimeout(() => instruction.textContent=('Match tied'));
