@@ -1,12 +1,12 @@
 function getComputerChoice() {
-    let choice='';
+    let choice = '';
     let randomNumber= Math.floor(Math.random()*3)+1;
-    if(randomNumber===1)
-    choice='rock';
-    else if(randomNumber===2)
-    choice='paper';
+    if(randomNumber === 1)
+    choice = 'rock';
+    else if(randomNumber === 2)
+    choice = 'paper';
     else
-    choice='scissor'
+    choice = 'scissor'
     return choice;
 }
 
@@ -139,16 +139,23 @@ function updateScoreUI() {
     document.querySelector('.score-computer').textContent = `${computerScore}`;
 }
 
-function end() {
+function end(result) {
     document.querySelectorAll('button').forEach(item => {
         document.querySelector('.buttons').removeChild(item);
     });
+
     document.querySelector('body').removeChild(document.querySelector('.score'));
+
     playerScore = 0;
     computerScore = 0;
-    instruction.textContent = 'Play another match?';
+
+    instruction.textContent = `You ${result}!!! Play another match?`;
+
     const playButton = document.createElement('button');
     playButton.classList.add('play');
+    const img = document.createElement('img');
+    img.src='images/crossed-swords.svg';
+    playButton.appendChild(img);
     playButton.addEventListener('click', () => {
         const button = document.querySelector('.buttons');
         button.removeChild(playButton); 
@@ -163,22 +170,21 @@ function playGame() {
             let playerSelection = item.classList.value;
             let computerSelection = getComputerChoice();
                 if(playRound(playerSelection,computerSelection) === 'player'){
-                   instruction.textContent=`You Won This Round! ${playerSelection} beats ${computerSelection}`;
+                   instruction.textContent=`Computer chose ${computerSelection}! You Won This Round! `;
                    playerScore++;
                    updateScoreUI();
                    if(playerScore === 5) {
                     instruction.textContent=('You Won');
-                    
-                    setTimeout(end, 3000);
+                    end('Won');
                     }
                 }
                 else if(playRound(playerSelection, computerSelection) === 'computer'){
-                    instruction.textContent=`You Lost This Round! ${computerSelection} beats ${playerSelection}`;
+                    instruction.textContent=`Computer chose ${computerSelection}! You Lost This Round! `;
                     computerScore++;
                     updateScoreUI();
                     if(computerScore === 5) {
                         instruction.textContent=('You Lost');
-                        setTimeout(end, 3000);
+                        end('Lost');
                     }
                 }
                 else
